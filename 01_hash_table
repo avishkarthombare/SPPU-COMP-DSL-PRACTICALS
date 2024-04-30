@@ -133,3 +133,5 @@ while (1):
         break
     else:
         print("Please Enter a valid choice!")
+
+#Thanks for referring code written by Avishkar
