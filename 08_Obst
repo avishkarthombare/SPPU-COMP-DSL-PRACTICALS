@@ -48,3 +48,4 @@ int main()
     cout << "\nCost of Optimal BST : " << optimalSearchTree(keys, freq, n) << "\n";
     return 0;
 }
+//Thanks for referring code written by Avishkar
