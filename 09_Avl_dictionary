@@ -172,3 +172,4 @@ int main()
         cout << "\n " << word << " found in " << comparisons << " comparisons\n";
     return 0;
 }
+//Thanks for referring code written by Avishkar
