@@ -156,3 +156,4 @@ while (1):
         break
     else:
         print("Please enter a valid choice")
+#Thanks for referring code written by Avishkar
