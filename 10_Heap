@@ -112,3 +112,4 @@ int main()
     cout << "The minimum marks are- " << min_heap.arr[0] << endl;
     cout << "The maximum marks are- " << max_heap.arr[0] << endl;
 }
+//Thanks for referring code written by Avishkar
