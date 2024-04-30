@@ -106,3 +106,4 @@ int main()
     g.primMST();
     return 0;
 }
+//Thanks for referring code written by Avishkar
