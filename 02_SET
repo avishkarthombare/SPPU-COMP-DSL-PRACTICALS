@@ -1,0 +1,81 @@
+# To create ADT that implement the "set" concept.
+# a. Add (new Element) -Place a value into the set , b. Remove (element) Remove the value
+# c. Contains (element) Return true if element is in collection, d. Size () Return number of values in collection Iterator () Return an iterator used to loop over collection, e. Intersection of two sets , f. Union of two sets, g. Difference between two sets, h. Subset
+
+
+
+
+
+class ADT:
+    def __init__(self):
+        self.data = []
+    
+    def __repr__(self):
+        return str(self.data)
+
+    def add(self, newElement):
+        if newElement not in self.data:
+            self.data.append(newElement)
+
+    def remove(self, element):
+        if element in self.data:
+            del self.data[element]
+
+    def contains(self, element):
+        return element in self.data
+
+    def size(self):
+        return len(self.data)
+
+    def iterator(self):
+        return iter(self.data)
+
+    def intersection(self, otherSet):
+        intersectionSet = ADT()
+        for element in self.data:
+            if element in otherSet.data:
+                intersectionSet.add(element)
+        return intersectionSet
+
+    def union(self, otherSet):
+        unionSet = ADT()
+        for element in self.data:
+            unionSet.add(element)
+        for element in otherSet.data:
+            unionSet.add(element)
+        print(unionSet) 
+
+    def difference(self, otherSet):
+        differenceSet = ADT()
+        for element in self.data:
+            if element not in otherSet.data:
+                differenceSet.add(element)
+        return differenceSet
+
+    def isSubset(self, otherSet):
+        for element in self.data:
+            if element not in otherSet.data:
+                return False
+        return True
+# Create sets
+set1 = ADT()
+set2 = ADT()
+
+# Add elements to sets
+set1.add(1)
+set1.add(2)
+set1.add(3)
+
+set2.add(2)
+set2.add(3)
+set2.add(4)
+set2.add(5)
+# Use ADT methods
+print(set1.contains(2)) # Output: True
+print( set1.size()) # Output: 3
+print(set2.size()) #output: 4
+print( set1.union(set2)) # Output: Set containing elements 1, 2, 3, 4,5
+print(set1.intersection(set2))
+print(set1.difference(set2))
+print(set1.isSubset(set2))
+#Thanks for referring code written by Avishkar
