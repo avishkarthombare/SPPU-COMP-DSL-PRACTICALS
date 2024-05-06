@@ -1,109 +1,57 @@
-#include<bits/stdc++.h>
+// You have a business with several offices; you want to lease phone lines to connect them
+// up with each other; and the phone company charges different amounts of money to
+// connect different pairs of cities. You want a set of lines that connects all your offices
+// with a minimum total cost. Solve the problem by suggesting appropriate data structures.
+
+#include<iostream>
 using namespace std;
-#define MAX 100
 
-struct Graph
-{
-    int data[MAX][MAX];
-    int vertices;
-    int edges;
-
-    void read()
-    {
-        cout << "Enter the number of vertices in the graph-\n";
-        cin >> vertices;
-
-        for (int i = 0; i < vertices; i++)
-        {
-            for (int j = 0; j < vertices; j++)
-            {
-                if (i != j)
-                {
-                    cout << "Enter the weight between vertex " + to_string(i) + " and " + to_string(j) + "\n";
-                    cin >> data[i][j];
-                }
-                else
-                {
-                    data[i][j] = 0;
-                }
-            }
-        }
-    }
-
-    void display()
-    {
-        for (int i = 0; i < vertices; i++)
-        {
-            for (int j = 0; j < vertices; j++)
-            {
-                cout << data[i][j] << " ";
-            }
-            cout << endl;
-        }
-    }
-
-    int minKey(int key[], bool mstSet[])
-    {
-        int min = INT_MAX, min_index;
-        for (int v = 0; v < vertices; v++)
-        {
-            if (mstSet[v] == false && key[v] < min)
-            {
-                min = key[v], min_index = v;
-            }
-        }
-        return min_index;
-    }
-
-    void printMST(int parent[])
-    {
-        int cost = 0;
-        cout<<"Edge \tWeight\n";
-        for (int i = 1; i < vertices; i++)
-        {
-            cout<< parent[i] <<" - "<<i<<" \t"<< data[i][parent[i]] <<" \n";
-        }
-        for (int i = 1; i < vertices; i++)
-        {
-            cost += data[i][parent[i]];
-        }
-        cout << cost << endl;
-    }
-
-    void primMST()
-    {
-        int parent[vertices];
-        int key[vertices];
-        bool mstSet[vertices];
- 
-        for (int i = 0; i < vertices; i++)
-        {
-            key[i] = INT_MAX, mstSet[i] = false;
-        }
-        key[0] = 0;
-        parent[0] = -1;
-        for (int count = 0; count < vertices - 1; count++)
-        {
-            int u = minKey(key, mstSet);
-            mstSet[u] = true;
-            for (int v = 0; v < vertices; v++)
-            {
-                if (data[u][v] && mstSet[v] == false && data[u][v] < key[v])
-                {
-                    parent[v] = u, key[v] = data[u][v];
-                }
-            }
-        }
-        printMST(parent);
-    }
-};
-
-int main()
-{
-    Graph g;
-    g.read();
-    g.display();
-    g.primMST();
-    return 0;
+int main(){
+	int n,i,j,k,row,col,mincost=0,min;
+	char op;
+	cout<<"Enter the number of cities :"<<endl;
+	int cost[n][n];
+	int visit[n];
+	for(i=0;i<n;i++){
+		visit[i]=0;
+	}
+	for(i=0;i<n;i++){
+		for(j=0;j<n;j++){
+			cost[i][j]=-1;
+		}
+	}
+	for(i=0;i<n;i++){
+		for(j=i+1,j<n;j++){
+			cout<<" Do you want a connection between city "<<i+1<<" And city "<<j+1<<endl;
+			cic>>op;
+			if(op=='y'|| op=='Y'){
+				cout<<"Enter the Weight :"<<endl;
+				cin>>cost[i][j];
+				cost[j][i]=cost[i][j];
+			}
+		}
+	}
+	visit[0]=1;
+	for(k=0;k<n-1;k++){
+		min=999;
+		for(i=0;i<n;i++){
+			for(j=0;j<n;j++){
+				if(visit[i]==1&& visit[j]==0){
+					if(cost[i][j]!=-1 && min>cost[i][j]){
+						min=cost[i][j];
+						row=i;
+						col=j;
+					}
+				}
+			}
+		}
+		mincost+=min;
+		visit[col]=1;
+		cost[row][col]=cost[col][row];
+		cout<<row+1<<"->"<<col+1<<endl;
+	}
+	cout<<"Min-cost ="<<mincost;
+	return 0;
 }
-//Thanks for referring code written by Avishkar
+
+/ Thanks for referring program done by Avishkar .
