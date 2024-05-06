@@ -1,133 +1,217 @@
-#include<bits/stdc++.h>
+// Beginning with an empty binary search tree, Construct binary search tree by inserting the values in the order given. After constructing a binary tree -
+// i. Insert new node, ii. Find number of nodes in longest path from root, iii. Minimum data value found in the tree, iv. Change a tree so that the roles of the left and right pointers
+// are swapped at every node, v. Search a value
+
+#include <iostream>
+#include <climits>
 using namespace std;
 
-struct Node
+class TreeNode
 {
+public:
     int data;
-    Node *left;
-    Node *right;
-    Node(int data)
-    {
-        this->data = data;
+    TreeNode *left;
+    TreeNode *right;
+    TreeNode(int data){
         left = NULL;
         right = NULL;
+        this->data = data;
     }
 };
 
-void traversal(Node* root) 
+class Tree{
+public:
+    TreeNode *root;
+
+    Tree(){
+        root = NULL;
+    }
+
+    void insert(TreeNode *root, TreeNode *node);
+    TreeNode *create();
+    void PrintInorder(TreeNode *root);
+    void search(TreeNode *root, int key);
+    int longestPath(TreeNode *root);
+    int MinInTree(TreeNode *root);
+    void Mirror(TreeNode *root);
+
+    int Max(int a, int b);
+    int Min(int a, int b);
+};
+
+int Tree::Max(int a, int b)
+{
+    int max = (a > b) ? a : b;
+    return max;
+}
+
+int Tree::Min(int a, int b)
+{
+    int min = (a < b) ? a : b;
+    return min;
+}
+
+void Tree::insert(TreeNode *root, TreeNode *node)
 {
     if (root == NULL)
     {
         return;
+    }
+
+    if (root->data > node->data)
+    {
+        if (root->left == NULL)
+            root->left = node;
+        else
+        {
+            insert(root->left, node);
+            return;
+        }
     }
     else
     {
-        cout << root->data << " ";
-        traversal(root->left);
-        traversal(root->right);
+        if (root->right == NULL)
+            root->right = node;
+        else
+        {
+            insert(root->right, node);
+            return;
+        }
     }
 }
 
-Node* insert(Node* &root, int x)
+TreeNode* Tree::create()
 {
-    if (root == NULL)
+    char ch;
+    ch = 'y';
+    do
     {
-        root = new Node(x);
-    }
-    else if (x >= root->data)
-    {
-        root->right = insert(root->right, x);
-    }
-    else if (x < root->data)
-    {
-        root->left = insert(root->left, x);
-    }
-    return root;
+        cout << "Enter the data for the node: " << endl;
+        int newdata;
+        cin >> newdata;
+        TreeNode *newNode = new TreeNode(newdata);
+
+        if (root == NULL)
+            root = newNode;
+
+        else
+        {
+            insert(root, newNode);
+        }
+
+        cout << "Do you want to continue?(y|n) :  ";
+        cin >> ch;
+    } while (ch != 'n');
+
+    return this->root;
 }
 
-int height(Node* root)
+void Tree::PrintInorder(TreeNode *root)
+{
+    if (root == NULL)
+        return;
+
+    PrintInorder(root->left);
+    cout << root->data << " ";
+    PrintInorder(root->right);
+}
+
+void Tree::search(TreeNode *root, int key)
 {
     if (root == NULL)
     {
+        cout << "key is not present\n";
+        return;
+    }
+
+    if (key < root->data) search(root->left, key);
+    else if (key > root->data)  search(root->right, key);
+    else{
+        cout << "key is present\n";
+        return;
+    }
+}
+
+int Tree::longestPath(TreeNode *root)
+{
+    if (root == NULL)
         return 0;
-    }    
-    int left_subtree = 1+height(root->left);
-    int right_subtree = 1+height(root->right);
-    return max(left_subtree, right_subtree);
+
+    int leftPath = longestPath(root->left);
+    int rightPath = longestPath(root->right);
+
+    return Max(leftPath, rightPath) + 1;
 }
 
-int minimum(Node* root)
-{
-    if (root->left == NULL)
-    {
-        return root->data;
-    }
-    return min(minimum(root->left), root->data);
-}
-
-void search(Node* root, int key, bool &present)
+int Tree::MinInTree(TreeNode *root)
 {
     if (root == NULL)
-    {
-        return;
-    }
-    if (root->data == key)
-    {
-        present = true;
-    }
-    else if (root->data > key)
-    {
-        search(root->left, key, present);
-    }
-    else if (root->data <= key)
-    {
-        search(root->right, key, present);
-    }
+        return INT_MAX;
+
+    int smallestInLeft = MinInTree(root->left);
+    int smallestInRight = MinInTree(root->right);
+
+    return Min(root->data, Min(smallestInLeft, smallestInRight));
 }
 
-void mirror(Node* &root)
+void Tree::Mirror(TreeNode *root)
 {
     if (root == NULL)
-    {
         return;
-    }
-    mirror(root->left);
-    mirror(root->right);
-    swap(root->left, root->right);
+
+    TreeNode *temp = root->left;
+    root->left = root->right;
+    root->right = temp;
+
+    Mirror(root->left);
+    Mirror(root->right);
 }
 
 int main()
 {
-    Node *root = NULL;
-    int n;
-    cout << "Enter the number of nodes to be inserted in the BST-\n";
-    cin >> n;
-    for (int i = 0; i < n; i++)
+
+    char ch;
+    cout << "\nChoose : \n1. Create a tree \n2. Display Tree \n3. Search a value \n4. To find the number of nodes in the Longest Path \n5. To find Node with Minimum data \n6. To Mirror the Tree \n7 To stop \n";
+    cin >> ch;
+    TreeNode *root;
+    Tree Mytree;
+    while (ch != '7')
     {
-        int element;
-        cout << "Enter the data value to be inserted-\n";
-        cin >> element;
-        insert(root, element);
+
+        if (ch == '1')
+        {
+            root = Mytree.create();
+        }
+        else if (ch == '2')
+        {
+            Mytree.PrintInorder(root);
+        }
+        else if (ch == '3')
+        {
+            cout << "Enter the key that want to find in the Tree\n";
+            int key;
+            cin >> key;
+            Mytree.search(root, key);
+        }
+        else if (ch == '4')
+        {
+            cout << Mytree.longestPath(root);
+        }
+        else if (ch == '5')
+        {
+            cout << Mytree.MinInTree(root);
+        }
+        else if (ch == '6')
+        {
+            Mytree.Mirror(root);
+            Mytree.PrintInorder(root);
+        }
+        cout << "\nChoose : \n1. Create a tree \n2. Display Tree \n3. Search a value \n4. To find the number of nodes in the Longest Path \n5. To find Node with Minimum data \n6. To Mirror the Tree \n7 To stop \n";
+        cin >> ch;
     }
-    cout << "Displaying the elements of the BST-\n";
-    traversal(root);
-    cout << endl;
-    cout << "Height of the tree is " << height(root) << endl;
-    cout << "Minimum value in the BST is " << minimum(root) << endl;
-    int key;
-    cout << "Enter the data value to be searched in the BST-\n";
-    cin >> key;
-    bool present = false;
-    search(root, key, present);
-    if (present == true)
-    {
-        cout << "Key is present in the BST!" << endl;
-    }
-    else
-    {
-        cout << "Key is not present in the BST!" << endl;
-    }
-    return 0;
+    cout << "Thank You!!";
 }
+
+
 //Thanks for referring code written by Avishkar
 
